@@ -88,6 +88,11 @@ var (
 
 // Database initialization
 func initDatabase() {
+	// Load .env if present
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, relying on OS environment")
+	}
+
 	// Get database configuration from environment variables
 	host := os.Getenv("DB_HOST")
 	if host == "" {
@@ -537,7 +542,7 @@ func main() {
 
 	// CORS middleware (basic)
 	r.Use(func(c *gin.Context) {
-		c.Header("Access-Control-Allow-Origin", "http://localhost:5173") // Change this to your frontend URL
+		c.Header("Access-Control-Allow-Origin", "http://localhost:8101") // Change this to your frontend URL
 		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
 		c.Header("Access-Control-Allow-Credentials", "true")

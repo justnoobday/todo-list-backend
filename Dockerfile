@@ -1,11 +1,8 @@
 # Stage 1: Build Go binary
-FROM golang:1.22-alpine AS builder
+FROM golang:1.24-alpine AS builder
 
 # Set working directory
 WORKDIR /app
-
-# Install build tools (opsional kalau perlu CGO)
-RUN apk add --no-cache git
 
 # Copy go.mod dan go.sum dulu biar cache build tetap kepake
 COPY go.mod go.sum ./
@@ -20,6 +17,8 @@ RUN go build -o main .
 # Stage 2: Final image
 FROM alpine:latest
 
+RUN apk add --no-cache git tzdata
+
 # Set working directory
 WORKDIR /root/
 
@@ -27,7 +26,7 @@ WORKDIR /root/
 COPY --from=builder /app/main .
 
 # Expose port (ubah sesuai app lo)
-EXPOSE 8080
+EXPOSE 8001
 
 # Run binary
 CMD ["./main"]
